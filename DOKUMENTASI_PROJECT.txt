@@ -1,0 +1,108 @@
+================================================================================
+DOKUMENTASI PROJECT TUGAS AKHIR PEMROGRAMAN WEB
+Sistem Informasi Perpustakaan Mini (TugasData1)
+================================================================================
+
+1. DESKRIPSI
+   Aplikasi berbasis web untuk pengelolaan data perpustakaan yang modern dan responsif.
+   Dibuat menggunakan Laravel 11 dengan integrasi Vite untuk manajemen aset frontend.
+   
+   Fitur Utama:
+   - CRUD Buku (Create, Read, Update, Delete) dengan perhitungan stok otomatis.
+   - CRUD Anggota.
+   - Transaksi Peminjaman (Logika stok, validasi, dan UI interaktif).
+   - Dashboard Statistik.
+   - UI Modern menggunakan Bootstrap 5 (Lokal/Offline), Select2, dan Flatpickr.
+
+================================================================================
+
+2. TEKNOLOGI & LIBRARY FRONTEND
+   - Bootstrap 5: Framework CSS utama (diinstall via npm, berjalan offline).
+   - Select2: Library untuk dropdown yang bisa dicari (Searchable Dropdown) pada pilihan Buku dan Anggota.
+   - Flatpickr: Library untuk input tanggal yang estetik dengan format 'DD/MM/YYYY'.
+   - Vite: Build tool untuk mengompilasi aset CSS dan JS.
+
+================================================================================
+
+3. STRUKTUR DATABASE (SQLite)
+
+   A. Tabel 'buku'
+      - id (PK): Identifikasi unik buku.
+      - judul: Judul buku.
+      - penulis: Nama pengarang.
+      - tahun_terbit: Tahun rilis buku.
+      - stok: Stok awal buku yang dimiliki perpustakaan.
+      - timestamps: created_at & updated_at.
+
+   B. Tabel 'anggota'
+      - id (PK): Identifikasi unik anggota.
+      - nama: Nama lengkap anggota.
+      - nomor_telepon: Kontak anggota.
+      - alamat: Alamat domisili.
+      - timestamps: created_at & updated_at.
+
+   C. Tabel 'peminjaman' (Relasi)
+      - id (PK): Identifikasi transaksi.
+      - buku_id (FK): Buku yang dipinjam.
+      - anggota_id (FK): Anggota yang meminjam.
+      - tanggal_pinjam: Tanggal pinjam (Format penyimpanan: YYYY-MM-DD).
+      - tanggal_kembali: Tanggal kembali (Nullable).
+      - status: Enum ['dipinjam', 'dikembalikan'].
+      - timestamps.
+
+================================================================================
+
+4. LOGIKA & ALUR FITUR BARU
+
+   A. Data Buku
+      - Tampilan tabel memecah informasi stok menjadi dua:
+        1. Stok Awal: Total buku yang dimiliki (dari database).
+        2. Stok Sisa: Stok Awal dikurangi jumlah buku yang sedang dipinjam (status 'dipinjam').
+      - Tombol "Pinjam": Terdapat tombol pintas di setiap baris buku untuk langsung mencatat peminjaman buku tersebut.
+
+   B. Transaksi Peminjaman
+      - Form Peminjaman:
+        * Dropdown Buku & Anggota menggunakan Select2 (bisa dicari).
+        * Jika masuk melalui tombol "Pinjam" di halaman Buku, kolom Buku otomatis terisi dan terkunci (Fixed/Disabled).
+        * Input tanggal menggunakan Flatpickr dengan tampilan 'DD/MM/YYYY' (User Friendly).
+      - Logic Stok:
+        * Saat meminjam: Stok sisa buku berkurang otomatis (Stok Awal tetap).
+        * Saat kembali: Status berubah jadi 'dikembalikan', tanggal kembali terisi otomatis, dan stok sisa bertambah.
+
+================================================================================
+
+5. DATA DUMMY (SEEDER)
+   Project ini dilengkapi dengan 'DatabaseSeeder' yang berisi data terkurasi (bukan random acak):
+   - 20 Judul Buku Best Seller (Novel Indonesia, Terjemahan, & Buku IT).
+   - 20 Data Anggota dengan nama Indonesia yang wajar.
+   - 5 Data Transaksi awal sebagai contoh.
+
+================================================================================
+
+6. INSTALASI & PENGGUNAAN
+
+   1. Persiapan Sistem:
+      - Pastikan PHP, Composer, dan Node.js (NPM) sudah terinstall.
+
+   2. Setup Backend (Laravel):
+      - Copy folder project.
+      - Buka terminal di folder project.
+      - Rename/Copy .env.example menjadi .env
+      - Pastikan DB_CONNECTION=sqlite (atau sesuaikan dengan database lokal).
+      - Jalankan: php artisan migrate:fresh --seed
+        (Perintah ini akan membuat database baru dan mengisi data buku/anggota yang sudah disiapkan).
+
+   3. Setup Frontend (Vite & Aset):
+      - Install dependensi frontend (Bootstrap, Select2, dll):
+        > npm install
+      - Compile aset (Jalankan terminal terpisah agar style terbaca):
+        > npm run dev
+
+   4. Jalankan Server:
+      - Buka terminal baru:
+        > php artisan serve
+      - Akses aplikasi di: http://localhost:8000
+
+================================================================================
+Diperbarui oleh Alisa (Gemini CLI Agent)
+Selasa, 16 Desember 2025
